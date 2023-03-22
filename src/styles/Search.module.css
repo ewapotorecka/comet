@@ -1,0 +1,29 @@
+.searchContainer {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.searchInput {
+  height: 2rem;
+  width: 100%;
+  font-family: "PT Sans Narrow", sans-serif;
+}
+
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.result {
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.result:hover {
+  background: #f5f4f6;
+}

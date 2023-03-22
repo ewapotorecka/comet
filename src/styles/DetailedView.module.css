@@ -1,0 +1,26 @@
+.detailedView {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.infoContainer {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 2fr 1fr;
+  gap: 2rem;
+  border: 1px solid black;
+}
+
+.item {
+  border: 1px solid blue;
+}
+
+.title {
+}
+
+.content {
+}
