@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/Search.module.css";
 import { useRouter } from "next/router";
+const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -10,7 +11,8 @@ const Search = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&datatype=json&keywords=${searchInput}&apikey=CJ6AYDD0MRYTRYJ7`
+        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&datatype=json&keywords=${searchInput}&apikey=${apikey}`,
+        { next: { revalidate: 120 } }
       );
       const data = await response.json();
       setResults(data.bestMatches);
@@ -37,7 +39,12 @@ const Search = () => {
               <div
                 key={el["1. symbol"]}
                 className={styles.result}
-                onClick={() => router.push(`/${el["1. symbol"]}`)}
+                onClick={() =>
+                  router.push({
+                    pathname: `/[symbol]`,
+                    query: { symbol: el["1. symbol"], name: el["2. name"] },
+                  })
+                }
               >
                 <p>{el["2. name"]}</p>
                 <p>{el["1. symbol"]}</p>
