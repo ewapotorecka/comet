@@ -54,3 +54,8 @@
 .loading {
   text-align: center;
 }
+
+.info {
+  margin: auto;
+  max-width: 90%;
+}

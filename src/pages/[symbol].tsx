@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
 import styles from "@/styles/DetailedView.module.css";
-
 import React, { useEffect, useState } from "react";
-
 import Favorite from "../assets/favorite.svg";
 import {
   LineChart,
@@ -15,61 +13,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Nav from "@/components/Nav";
+import { prepareHistoryData } from "@/helpers/prepareHistoryData";
+import { toggleFavorites } from "@/helpers/toggleFavorites";
 
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
-
-const prepareHistoryData = (history: any, dates: any) => {
-  if (!history || !dates) {
-    return;
-  }
-  const chartData = [];
-
-  for (const day of dates) {
-    const dayData = { ...history[day], date: day };
-
-    chartData.push(dayData);
-  }
-
-  return chartData;
-};
-
-const toggleFavorites = ({
-  symbol,
-  name,
-}: {
-  symbol: string;
-  name: string;
-}) => {
-  const favorites = localStorage.getItem("favorites");
-
-  if (favorites) {
-    const favoritesToUpdate = JSON.parse(favorites);
-
-    if (
-      favoritesToUpdate.findIndex(
-        (el: { "1. symbol": string; "2. name": string }) =>
-          el["1. symbol"] === symbol
-      ) >= 0
-    ) {
-      favoritesToUpdate.splice(
-        favoritesToUpdate.findIndex(
-          (el: { "1. symbol": string; "2. name": string }) =>
-            el["1. symbol"] === symbol
-        ),
-        1
-      );
-      localStorage.setItem("favorites", JSON.stringify(favoritesToUpdate));
-    } else {
-      favoritesToUpdate.push({ "1. symbol": symbol, "2. name": name });
-      localStorage.setItem("favorites", JSON.stringify(favoritesToUpdate));
-    }
-  } else {
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify([{ "1. symbol": symbol, "2. name": name }])
-    );
-  }
-};
 
 const DetailedStock = () => {
   const router = useRouter();
@@ -119,8 +66,7 @@ const DetailedStock = () => {
     } else {
       if (
         JSON.parse(favorites).findIndex(
-          (el: { "1. symbol": string; "2. name": string }) =>
-            el["1. symbol"] === symbol
+          (el: { symbol: string; name: string }) => el.symbol === symbol
         ) >= 0
       ) {
         setFavorite(true);
@@ -157,9 +103,14 @@ const DetailedStock = () => {
               </button>
             </div>
             <p>Symbol: {symbol ? symbol : ""}</p>
-            <p>Current price: {price ? price : ""}</p>
+            <p>
+              Current price:{" "}
+              {price
+                ? price
+                : "API calls number restriction - please reload page in 60s to see current price"}
+            </p>
           </div>
-          {history && (
+          {history && history?.length > 0 ? (
             <div className={styles.chart}>
               <ResponsiveContainer width="90%" height="100%" minHeight={400}>
                 <LineChart
@@ -179,10 +130,17 @@ const DetailedStock = () => {
                   <Tooltip />
                   <Legend verticalAlign="top" />
 
-                  <Line type="monotone" dataKey="2. high" stroke="#A5BE00" />
-                  <Line type="monotone" dataKey="3. low" stroke="#ED7D3A" />
+                  <Line type="monotone" dataKey="high" stroke="#A5BE00" />
+                  <Line type="monotone" dataKey="low" stroke="#ED7D3A" />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className={styles.info}>
+              <p>
+                API calls number restriction - please reload page in 60s to see
+                the history chart
+              </p>
             </div>
           )}
         </>

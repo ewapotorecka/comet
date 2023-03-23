@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/Search.module.css";
 import StockList from "@/components/StockList";
+import { prepareSearchResults } from "@/helpers/prepareSearchResults";
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<{ symbol: string; name: string }[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,7 +18,7 @@ const Search = () => {
       );
       const data = await response.json();
 
-      setResults(data.bestMatches);
+      setResults(prepareSearchResults(data.bestMatches));
     };
 
     fetchData();

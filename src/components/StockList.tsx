@@ -1,11 +1,7 @@
 import styles from "@/styles/Search.module.css";
 import { useRouter } from "next/router";
 
-const StockList = ({
-  list,
-}: {
-  list: { "1. symbol": string; "2. name": string }[];
-}) => {
+const StockList = ({ list }: { list: { symbol: string; name: string }[] }) => {
   const router = useRouter();
 
   return (
@@ -14,18 +10,18 @@ const StockList = ({
         list.map((el) => {
           return (
             <div
-              key={el["1. symbol"]}
+              key={el.symbol}
               className={styles.result}
               onClick={() =>
                 router.push({
                   pathname: `/[symbol]`,
-                  query: { symbol: el["1. symbol"], name: el["2. name"] },
+                  query: { symbol: el["symbol"], name: el.name },
                 })
               }
             >
               <div>
-                <p className={styles.name}>{el["2. name"]}</p>
-                <p>Symbol: {el["1. symbol"]}</p>
+                <p className={styles.name}>{el.name}</p>
+                <p>Symbol: {el.symbol}</p>
               </div>
             </div>
           );
