@@ -1,0 +1,26 @@
+.nav {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.navLink {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: #253237;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.navLinkActive {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: #a5be00;
+  text-decoration: none;
+  pointer-events: none;
+}

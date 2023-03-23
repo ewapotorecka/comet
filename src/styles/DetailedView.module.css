@@ -14,3 +14,43 @@
   gap: 2rem;
   border: 1px solid black;
 }
+
+.favorites {
+  display: flex;
+  height: fit-content;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+}
+
+.favoritesIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.favoritesIconActive {
+  width: 24px;
+  height: 24px;
+  fill: black;
+}
+
+.favoritesIconActive:hover {
+  fill: none;
+}
+
+.favoritesIcon:hover {
+  fill: black;
+}
+
+.header {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.loading {
+  text-align: center;
+}

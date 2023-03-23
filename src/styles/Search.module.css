@@ -22,8 +22,16 @@
   border-radius: 4px;
   padding: 1rem;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .result:hover {
   background: #f5f4f6;
+}
+
+.name {
+  font-size: 1.25rem;
+  font-weight: bold;
 }

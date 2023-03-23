@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import styles from "@/styles/DetailedView.module.css";
-import Link from "next/link";
+
 import React, { useEffect, useState } from "react";
+
+import Favorite from "../assets/favorite.svg";
 import {
   LineChart,
   Line,
@@ -12,6 +14,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import Nav from "@/components/Nav";
 
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -30,6 +33,43 @@ const prepareHistoryData = (history: any, dates: any) => {
   return chartData;
 };
 
+const toggleFavorites = ({
+  symbol,
+  name,
+}: {
+  symbol: string;
+  name: string;
+}) => {
+  const favorites = localStorage.getItem("favorites");
+
+  if (favorites) {
+    const favoritesToUpdate = JSON.parse(favorites);
+
+    if (
+      favoritesToUpdate.findIndex(
+        (el: { "1. symbol": string; "2. name": string }) =>
+          el["1. symbol"] === symbol
+      ) >= 0
+    ) {
+      favoritesToUpdate.splice(
+        favoritesToUpdate.findIndex(
+          (el: { "1. symbol": string; "2. name": string }) =>
+            el["1. symbol"] === symbol
+        )
+      );
+      localStorage.setItem("favorites", JSON.stringify(favoritesToUpdate));
+    } else {
+      favoritesToUpdate.push({ "1. symbol": symbol, "2. name": name });
+      localStorage.setItem("favorites", JSON.stringify(favoritesToUpdate));
+    }
+  } else {
+    localStorage.setItem(
+      "favorites",
+      JSON.stringify([{ "1. symbol": symbol, "2. name": name }])
+    );
+  }
+};
+
 const DetailedStock = () => {
   const router = useRouter();
   const { symbol, name } = router.query;
@@ -38,8 +78,7 @@ const DetailedStock = () => {
   const [history, setHistory] = useState<any[] | undefined>();
   const price =
     data && data["Global Quote"] && data["Global Quote"]["05. price"];
-
-  console.log(history, "history");
+  const [isFavorite, setFavorite] = useState<boolean>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,15 +110,48 @@ const DetailedStock = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const favorites = localStorage.getItem("favorites");
+
+    if (!favorites) {
+      setFavorite(false);
+    } else {
+      if (
+        JSON.parse(favorites).findIndex((el) => el["1. symbol"] === symbol) >= 0
+      ) {
+        setFavorite(true);
+      } else {
+        setFavorite(false);
+      }
+    }
+  }, [isFavorite]);
+
   return (
     <>
+      <Nav />
       {loading ? (
-        <p>Loading...</p>
+        <p className={styles.loading}>Loading...</p>
       ) : (
         <>
           <div className={styles.detailedView}>
-            <Link href="/">Back to search</Link>
-            <h1>{name ? name : ""}</h1>
+            <div className={styles.header}>
+              <h1>{name ? name : ""}</h1>
+              <button
+                className={styles.favorites}
+                onClick={() => {
+                  toggleFavorites({ symbol, name });
+                  setFavorite(!isFavorite);
+                }}
+              >
+                <Favorite
+                  className={
+                    isFavorite
+                      ? styles.favoritesIconActive
+                      : styles.favoritesIcon
+                  }
+                />
+              </button>
+            </div>
             <p>Symbol: {symbol ? symbol : ""}</p>
             <p>Current price: {price ? price : ""}</p>
           </div>
@@ -103,8 +175,8 @@ const DetailedStock = () => {
                   <Tooltip />
                   <Legend verticalAlign="top" />
 
-                  <Line type="monotone" dataKey="2. high" stroke="#8884d8" />
-                  <Line type="monotone" dataKey="3. low" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="2. high" stroke="#A5BE00" />
+                  <Line type="monotone" dataKey="3. low" stroke="#ED7D3A" />
                 </LineChart>
               </ResponsiveContainer>
             </div>

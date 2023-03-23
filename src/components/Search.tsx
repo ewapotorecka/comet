@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/Search.module.css";
-import { useRouter } from "next/router";
+import StockList from "@/components/StockList";
 const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState("");
   const [results, setResults] = useState([]);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,27 +30,7 @@ const Search = () => {
         onChange={(e) => setSearchInput(e.target.value)}
         className={styles.searchInput}
       />
-      <div className={styles.resultsContainer}>
-        {results &&
-          results.map((el) => {
-            console.log(el);
-            return (
-              <div
-                key={el["1. symbol"]}
-                className={styles.result}
-                onClick={() =>
-                  router.push({
-                    pathname: `/[symbol]`,
-                    query: { symbol: el["1. symbol"], name: el["2. name"] },
-                  })
-                }
-              >
-                <p>{el["2. name"]}</p>
-                <p>{el["1. symbol"]}</p>
-              </div>
-            );
-          })}
-      </div>
+      <StockList list={results} />
     </div>
   );
 };
