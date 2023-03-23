@@ -55,7 +55,8 @@ const toggleFavorites = ({
         favoritesToUpdate.findIndex(
           (el: { "1. symbol": string; "2. name": string }) =>
             el["1. symbol"] === symbol
-        )
+        ),
+        1
       );
       localStorage.setItem("favorites", JSON.stringify(favoritesToUpdate));
     } else {
