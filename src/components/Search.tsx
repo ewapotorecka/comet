@@ -14,6 +14,7 @@ const Search = () => {
         { next: { revalidate: 120 } }
       );
       const data = await response.json();
+
       setResults(data.bestMatches);
     };
 

@@ -72,7 +72,7 @@ const toggleFavorites = ({
 
 const DetailedStock = () => {
   const router = useRouter();
-  const { symbol, name } = router.query;
+  const { symbol, name } = router.query as { symbol: string; name: string };
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [history, setHistory] = useState<any[] | undefined>();
@@ -117,7 +117,10 @@ const DetailedStock = () => {
       setFavorite(false);
     } else {
       if (
-        JSON.parse(favorites).findIndex((el) => el["1. symbol"] === symbol) >= 0
+        JSON.parse(favorites).findIndex(
+          (el: { "1. symbol": string; "2. name": string }) =>
+            el["1. symbol"] === symbol
+        ) >= 0
       ) {
         setFavorite(true);
       } else {

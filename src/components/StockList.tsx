@@ -1,7 +1,11 @@
 import styles from "@/styles/Search.module.css";
 import { useRouter } from "next/router";
 
-const StockList = ({ list }) => {
+const StockList = ({
+  list,
+}: {
+  list: { "1. symbol": string; "2. name": string }[];
+}) => {
   const router = useRouter();
 
   return (
